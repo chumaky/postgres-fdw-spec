@@ -1,0 +1,40 @@
+foreign_server:
+  servername:
+    required: true
+    description: Database server hostname
+  port:
+    required: true
+    default: 1433
+    description: Database port number
+  database:
+    required: true
+    description: Database name
+
+
+user_mapping:
+  username:
+    required: true
+    description: Username to use when connecting to the MSSQL/Sybase server.
+  password:
+    required: true
+    description: Password to authenticate to the MSSQL/Sybase server.
+
+
+import_foreign_schema:
+  remote_schema:
+    required: true
+    description: Remote schema in MSSQL/Sybase server to import from.
+  local_schema:
+    required: true
+    description: Local schema in which imported foreign tables will be created.
+  import_default:
+    required: false
+    default: false
+    description: >
+      Controls whether column DEFAULT expressions are included in the definitions of foreign tables.
+  import_not_null:
+    required: false
+    default: true
+    description: >
+      This option controls whether column NOT NULL constraints are included in the definitions
+      of foreign tables imported from a foreign server. The default is true.

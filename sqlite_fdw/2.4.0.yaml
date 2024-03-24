@@ -1,0 +1,26 @@
+foreign_server:
+  database:
+    required: true
+    description: >
+      Path to the filename with SQLite database.
+      File must be reachable on the server's file system where HSQL is running on
+
+
+import_foreign_schema:
+  # Note: sqlite doesn't have schemas. to support common IMPORT FOREIGN SCHEMA syntax
+  # it's required to use any dummy value for a remote_schema parameter.
+  # IMPORT FOREIGN SCHEMA "some_schema" FROM SERVER sqlite_server INTO public;
+  # "some_schema" has no particular meaning for sqlite and can be set to an arbitrary value.
+  local_schema:
+    required: true
+    description: The schema in which the imported foreign tables will be created.
+
+
+create_foreign_table:
+  table:
+    required: true
+    description: SQLite table name.
+  truncatable:
+    required: false
+    description: >
+      This option controls whether sqlite_fdw allows foreign tables to be truncated using the TRUNCATE command.

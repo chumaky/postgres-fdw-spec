@@ -3,11 +3,12 @@
 This projects aims to provide a YAML specification for Postgres foreign data wrappers (FDW) configuration.
 
 ## Template
-Specification template consists of four main sections:
+Specification template consists of the following sections:
 - `foreign_server`
 - `user_mapping`
 - `import_foreign_schema`
 - `create_foreign_table`
+- `foreign_table_column`
 
 Only `foreign_server` section is required.
 In a sense that you must create a foreign server to be able to use the FDW.
@@ -18,10 +19,12 @@ Each section can have zero, one or set of options that can be used to configure 
 > If `foreign_server` section has no options as per FDW implementation, it turns it into an optional section.
 In this case, it can be ommited from the configuration file.
 
-Option itself has a `name` denoted by `option` key and a set of properties:
+Option itself has a `name` denoted by `option` key and a set of properties.
+All properties are optional. If not provided, they are considered as `null`.
 
-- `required`: `true` | `false`. Flag, whether the option is required or not.
+- `required`: `true` | `false` | `conditional`. Flag, whether the option is required or not.
 - `default`: default value, if any
+- `data_type`: data type of the option
 - `description`: description of the option
 
 ```yaml
@@ -41,6 +44,11 @@ create_foreign_table:
 [- <option>
  ...
  - <option>]
+foreign_table_column:
+[- <option>
+ ...
+ - <option>]
+
 
 <option> =
   option:

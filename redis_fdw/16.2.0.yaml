@@ -8,12 +8,14 @@ foreign_server:
     default: 6379
     description: Port number of the Redis server. Defaults to 6379.
 
+
 user_mapping:
   password:
     required: false
     description: >
       Password to be used if the server demands password authentication.
       By default, no password required.
+
 
 create_foreign_table:
   database:

@@ -12,6 +12,7 @@ foreign_server:
     default: postgres
     description: The database name. Defaults to be the same as the user name.
 
+
 user_mapping:
   user:
     required: true
@@ -21,6 +22,7 @@ user_mapping:
     required: true
     default: postgres
     description: Password to be used if the server demands password authentication. Defaults to user name.
+
 
 import_foreign_schema:
   remote_schema:
@@ -53,6 +55,7 @@ import_foreign_schema:
     description: >
       This option controls whether column NOT NULL constraints are included in the definitions
       of foreign tables imported from a foreign server. The default is true.
+
 
 create_foreign_table:
   schema_name:

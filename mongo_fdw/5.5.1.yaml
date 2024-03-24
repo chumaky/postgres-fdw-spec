@@ -1,0 +1,43 @@
+foreign_server:
+  address:
+    required: true
+    default: 127.0.0.1
+    description: Address or hostname of the MongoDB server. Defaults to 127.0.0.1
+  port:
+    required: true
+    default: 27017
+    description: Port number of the MongoDB server. Defaults to 27017.
+  authentication_database:
+    required: true
+    description: >
+      Database against which user will be authenticated against.
+      Only valid with password based authentication.
+
+    
+user_mapping:
+  username:
+    required: true
+    description: Username to use when connecting to MongoDB.
+  password:
+    required: true
+    description: Password to authenticate to the MongoDB server.
+
+
+create_foreign_table:
+  database:
+    default: test
+    description: Name of the MongoDB database to query. Defaults to test.
+  collection:
+    description: >
+      Name of the MongoDB collection to query.
+      Defaults to the foreign table name used in the relevant CREATE command.
+  enable_join_pushdown:
+    default: true
+    description: >
+      Similar to the server-level option, but can be configured at table level as well.
+      Default is true.
+  enable_aggregate_pushdown:
+    default: true
+    description: >
+      Similar to the server-level option, but can be configured at table level as well.
+      Default is true.

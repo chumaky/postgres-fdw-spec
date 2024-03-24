@@ -1,0 +1,99 @@
+foreign_server:
+  host:
+    required: true
+    default: 127.0.0.1
+    description: Address or hostname of the MySQL server. Defaults to 127.0.0.1
+  port:
+    required: true
+    default: 3306
+    description: Port number of the MySQL server. Defaults to 3306
+  secure_auth:
+    default: true
+    description: Enable or disable secure authentication. Default is true
+  init_command:
+    description: SQL statement to execute when connecting to the MySQL server.
+  reconnect:
+    default: false
+    description: >
+      Enable or disable automatic reconnection to the MySQL server
+      if the existing connection is found to have been lost. Default is false.
+  fetch_size:
+    required: true
+    default: 100
+    description: >
+      This option specifies the number of rows mysql_fdw should get in each fetch operation.
+      It can be specified for a foreign table or a foreign server.
+      The option specified on a table overrides an option specified for the server.
+      The default is 100.
+
+
+user_mapping:
+  username:
+    required: true
+    default: root
+    description: Username to use when connecting to MySQL.
+  password:
+    required: true
+    default: root
+    description: >
+      Password to authenticate to the MySQL server with.
+      Defaults to be the same as the Username.
+
+
+import_foreign_schema:
+  dbname:
+    required: true
+    description: Name of the MySQL database (schema) to import. This is a mandatory option.
+  local_schema:
+    required: true
+    description: The schema in which the imported foreign tables will be created.
+  import_default:
+    required: false
+    default: false
+    description: >
+      This option controls whether column DEFAULT expressions are included in the definitions
+      of foreign tables imported from a foreign server. The default is false.
+  import_not_null:
+    required: false
+    default: true
+    description: >
+      This option controls whether column NOT NULL constraints are included in the definitions
+      of foreign tables imported from a foreign server. The default is true.
+  import_enum_as_text:
+    required: false
+    default: false
+    description: >
+      This option can be used to map MySQL ENUM type to TEXT type in the definitions
+      of foreign tables, otherwise emit a warning for type to be created. The default is false.
+  import_generated:
+    required: false
+    default: true
+    description: >
+      This option controls whether GENERATED column expressions are included in the definitions
+      of foreign tables imported from a foreign server or not. The default is true.
+      The IMPORT will fail altogether if an imported generated expression
+      uses a function or operator that does not exist on PostgreSQL.
+
+
+create_foreign_table:
+  name:
+    required: true
+    description: Name of the created foreign table.
+  dbname:
+    required: true
+    description: Name of the MySQL database to query. This is a mandatory option.
+  table_name:
+    required: false
+    description: Name of the MySQL table, default is the same as foreign table.
+  max_blob_size:
+    required: true
+    description: Max blob size to read without truncation.
+  fetch_size:
+    required: true
+    default: 100
+    description: >
+      This option specifies the number of rows mysql_fdw should get in each fetch operation.
+      It can be specified for a foreign table or a foreign server.
+      The option specified on a table overrides an option specified for the server.
+      The default is 100.
+
