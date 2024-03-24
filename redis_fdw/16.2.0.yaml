@@ -1,17 +1,20 @@
 foreign_server:
   address:
-    required: true
+    required: false
     default: 127.0.0.1
+    data_type: string
     description: Address or hostname of the Redis server. Defaults to 127.0.0.1.
   port:
-    required: true
+    required: false
     default: 6379
+    data_type: integer
     description: Port number of the Redis server. Defaults to 6379.
 
 
 user_mapping:
   password:
     required: false
+    data_type: string
     description: >
       Password to be used if the server demands password authentication.
       By default, no password required.
@@ -21,28 +24,33 @@ create_foreign_table:
   database:
     required: false
     default: 0
+    data_type: integer
     description: The numeric ID of the Redis database to query.
   tabletype:
     required: false
     default: none
+    data_type: string
     description: >
       Can be 'hash', 'list', 'set' or 'zset'.
       Default: none, meaning only look at scalar values.
   tablekeyprefix:
     required: false
     default: none
+    data_type: string
     description: >
       Only get items whose names start with the prefix.
       You can only have one of tablekeyset and tablekeyprefix, and if you use singleton_key you can't have either.
   tablekeyset:
     required: false
     default: none
+    data_type: string
     description: >
       Fetch item names from the named set.
       You can only have one of tablekeyset and tablekeyprefix, and if you use singleton_key you can't have either.
   singleton_key:
     required: false
     default: none
+    data_type: string
     description: >
       Get all the values in the table from a single named object.
       Default: none, meaning don't just use a single object.
