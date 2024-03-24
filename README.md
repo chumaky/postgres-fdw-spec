@@ -19,7 +19,7 @@ Each section can have zero, one or set of options that can be used to configure 
 > If `foreign_server` section has no options as per FDW implementation, it turns it into an optional section.
 In this case, it can be ommited from the configuration file.
 
-Option itself has a `name` denoted by `option` key and a set of properties.
+Option itself has a name denoted by `option` key and a set of properties.
 All properties are optional. If not provided, they are considered as `null`.
 
 - `required`: `true` | `false` | `conditional`. Flag, whether the option is required or not.

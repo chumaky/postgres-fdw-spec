@@ -1,43 +1,128 @@
 foreign_server:
   address:
-    required: true
+    required: false
     default: 127.0.0.1
+    data_type: string
     description: Address or hostname of the MongoDB server. Defaults to 127.0.0.1
   port:
-    required: true
+    required: false
     default: 27017
+    data_type: integer
     description: Port number of the MongoDB server. Defaults to 27017.
   authentication_database:
-    required: true
+    required: conditional
+    data_type: string
     description: >
       Database against which user will be authenticated against.
       Only valid with password based authentication.
+  use_remote_estimate:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Controls whether mongo_fdw uses exact rows from remote collection to obtain cost estimates.
+  replica_set:
+    required: false
+    data_type: string
+    description: >
+      Replica set the server is member of.
+      If set, driver will auto-connect to correct primary in the replica set when writing.
+  read_preference:
+    required: false
+    default: primary
+    data_type: string
+    description: >
+      primary, secondary, primaryPreferred, secondaryPreferred, or nearest.
+  ssl:
+    required: false
+    default: false
+    data_type: boolean
+    description: Enable ssl. See http://mongoc.org/libmongoc/current/mongoc_ssl_opt_t.html to understand the options.
+  pem_file:
+    required: false
+    data_type: string
+    description: The .pem file that contains both the TLS/SSL certificate and key.
+  pem_pwd:
+    required: false
+    data_type: string
+    description: The password to decrypt the certificate key file(i.e. pem_file).
+  ca_file:
+    required: false
+    data_type: string
+    description: The .pem file that contains the root certificate chain from the Certificate Authority.
+  ca_dir:
+    required: false
+    data_type: string
+    description: The absolute path to the ca_file.
+  crl_file:
+    required: false
+    data_type: string
+    description: The .pem file that contains the Certificate Revocation List.
+  weak_cert_validation:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Enable the validation checks for TLS/SSL certificates and allows the use of invalid certificates to connect if set to true.
+  enable_join_pushdown:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      If true, pushes the join between two foreign tables from the same foreign server, instead of fetching all the rows for both the tables and performing a join locally.
+      This option can also be set for an individual table, and if any of the tables involved in the join has set it to false then the join will not be pushed down.
+      The table-level value of the option takes precedence over the server-level option value.
+  enable_aggregate_pushdown:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      If true, push aggregates to the remote MongoDB server instead of fetching all of the rows and aggregating them locally.
+      This option can also be set for an individual table.
+      The table-level value of the option takes precedence over the server-level option value.
+  enable_order_by_pushdown:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      If true, pushes the ORDER BY clause to the foreign server instead of performing a sort locally.
+      This option can also be set for an individual table, and if any of the tables involved in the query has set it to false then the ORDER BY will not be pushed down.
+      The table-level value of the option takes precedence over the server-level option value.
 
-    
+
 user_mapping:
   username:
-    required: true
+    required: false
+    data_type: string
     description: Username to use when connecting to MongoDB.
   password:
-    required: true
+    required: false
+    data_type: string
     description: Password to authenticate to the MongoDB server.
 
 
 create_foreign_table:
   database:
+    required: false
     default: test
-    description: Name of the MongoDB database to query. Defaults to test.
+    data_type: string
+    description: Name of the MongoDB database to query.
   collection:
-    description: >
-      Name of the MongoDB collection to query.
-      Defaults to the foreign table name used in the relevant CREATE command.
+    required: false
+    data_type: string
+    description: Name of the MongoDB collection to query. Defaults to the name of the foreign table.
   enable_join_pushdown:
+    required: false
     default: true
-    description: >
-      Similar to the server-level option, but can be configured at table level as well.
-      Default is true.
+    data_type: boolean
+    description: Similar to the server-level option, but can be configured at table level as well.
   enable_aggregate_pushdown:
+    required: false
     default: true
-    description: >
-      Similar to the server-level option, but can be configured at table level as well.
-      Default is true.
+    data_type: boolean
+    description: Similar to the server-level option, but can be configured at table level as well.
+  enable_order_by_pushdown:
+    required: false
+    default: true
+    data_type: boolean
+    description: Similar to the server-level option, but can be configured at table level as well.
