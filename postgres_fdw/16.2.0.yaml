@@ -1,0 +1,67 @@
+foreign_server:
+  host:
+    required: true
+    default: 127.0.0.1
+    description: Address or hostname of the PostgreSQL server. Defaults to 127.0.0.1.
+  port:
+    required: true
+    default: 5432
+    description: Port number of the PostgreSQL server. Defaults to 5432.
+  dbname:
+    required: true
+    default: postgres
+    description: The database name. Defaults to be the same as the user name.
+
+user_mapping:
+  user:
+    required: true
+    default: postgres
+    description: PostgreSQL user name to connect as. Defaults to postgres.
+  password:
+    required: true
+    default: postgres
+    description: Password to be used if the server demands password authentication. Defaults to user name.
+
+import_foreign_schema:
+  remote_schema:
+    required: true
+    description: Remote schema in PostgreSQL server to import from.
+  local_schema:
+    required: true
+    description: Local schema in which imported foreign tables will be created.
+  import_collate:
+    required: false
+    default: true
+    description: >
+      This option controls whether column COLLATE options are included in the definitions
+      of foreign tables imported from a foreign server. The default is true.
+  import_default:
+    required: false
+    default: false
+    description: >
+      This option controls whether column DEFAULT expressions are included in the definitions
+      of foreign tables imported from a foreign server. The default is false.
+  import_generated:
+    required: false
+    default: true
+    description: >
+      This option controls whether column GENERATED expressions are included in the definitions
+      of foreign tables imported from a foreign server. The default is true.
+  import_not_null:
+    required: false
+    default: true
+    description: >
+      This option controls whether column NOT NULL constraints are included in the definitions
+      of foreign tables imported from a foreign server. The default is true.
+
+create_foreign_table:
+  schema_name:
+    required: false
+    description: >
+      Schema name to use for the foreign table on the remote server.
+      If this option is omitted, the name of the foreign table's schema is used.
+  table_name:
+    required: false
+    description: >
+      Table name to use for the foreign table on the remote server
+      If this option is omitted, the foreign table's name is used.

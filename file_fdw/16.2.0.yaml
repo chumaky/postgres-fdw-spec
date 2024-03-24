@@ -1,0 +1,10 @@
+create_foreign_table:
+  table_name:
+    required: true
+    description: Table name (optionally schema-qualified) to store file data.
+  filename:
+    required: false
+    description: The path name of the input file. File name can be an absolute or relative path.
+  program:
+    required: false
+    description: A command to execute. The input is read from standard output of the command.
