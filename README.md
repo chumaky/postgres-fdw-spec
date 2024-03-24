@@ -52,8 +52,9 @@ foreign_table_column:
 
 <option> =
   option:
-    required: true | false
+    required: true | false | conditional
     default:
+    data_type:
     description:
 ```
 
