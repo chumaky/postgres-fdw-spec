@@ -47,25 +47,25 @@ All properties are optional. If not provided, they are considered as `null`.
 
 ```yaml
 foreign_server:
-[- <option>
+[<option>
  ...
- - <option>]
+ <option>]
 user_mapping:
-[- <option>
+[<option>
  ...
- - <option>]
+ <option>]
 import_foreign_schema:
-[- <option>
+[<option>
  ...
- - <option>]
+ <option>]
 create_foreign_table:
-[- <option>
+[<option>
  ...
- - <option>]
+ <option>]
 foreign_table_column:
-[- <option>
+[<option>
  ...
- - <option>]
+ <option>]
 
 
 <option> =
