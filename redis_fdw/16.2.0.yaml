@@ -1,3 +1,8 @@
+name: redis_fdw
+version: 16.2.0
+source: https://github.com/pg-redis-fdw/redis_fdw
+
+
 foreign_server:
   address:
     required: false

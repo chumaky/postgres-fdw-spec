@@ -1,3 +1,8 @@
+name: tds_fdw
+version: master_2.0.3
+source: https://github.com/tds-fdw/tds_fdw
+
+
 foreign_server:
   servername:
     required: true

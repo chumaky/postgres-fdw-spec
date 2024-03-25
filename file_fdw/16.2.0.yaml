@@ -1,3 +1,8 @@
+name: file_fdw
+version: 16.2.0
+source: https://www.postgresql.org/docs/current/file-fdw.html
+
+
 create_foreign_table:
   filename:
     required: conditional

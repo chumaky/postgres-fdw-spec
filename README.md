@@ -2,8 +2,26 @@
 
 This projects aims to provide a YAML specification for Postgres foreign data wrappers (FDW) configuration.
 
-## Template
-Specification template consists of the following sections:
+## Structure
+Specification consists of the general information and FDW implementation sections. 
+
+Common information includes:
+- `name`: FDW name
+- `version`: FDW version
+- `source`: official FDW repository/documentation URL
+
+```yaml
+name: <fdw_name>
+version: <fdw_version>
+source: <official_repo_url>
+
+<fdw_template>
+```
+
+Where `<fdw_template>` is a FDW implementation template.
+
+## FDW Template
+FDW implementation template consists of the following sections:
 - `foreign_server`
 - `user_mapping`
 - `import_foreign_schema`

@@ -1,6 +1,12 @@
+name: sqlite_fdw
+version: 2.4.0
+source: https://github.com/pgspider/sqlite_fdw
+
+
 foreign_server:
   database:
     required: true
+    data_type: string
     description: >
       Path to the filename with SQLite database.
       File must be reachable on the server's file system where HSQL is running on

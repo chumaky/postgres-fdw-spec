@@ -1,11 +1,18 @@
+name: postgres_fdw
+version: 16.2.0
+source: https://www.postgresql.org/docs/current/postgres-fdw.html
+
+
 foreign_server:
   host:
     required: true
     default: 127.0.0.1
+    data_type: string
     description: Address or hostname of the PostgreSQL server. Defaults to 127.0.0.1.
   port:
     required: true
     default: 5432
+    data_type: integer
     description: Port number of the PostgreSQL server. Defaults to 5432.
   dbname:
     required: true
@@ -17,41 +24,41 @@ user_mapping:
   user:
     required: true
     default: postgres
+    data_type: string
     description: PostgreSQL user name to connect as. Defaults to postgres.
   password:
     required: true
     default: postgres
+    data_type: string
     description: Password to be used if the server demands password authentication. Defaults to user name.
 
 
 import_foreign_schema:
-  remote_schema:
-    required: true
-    description: Remote schema in PostgreSQL server to import from.
-  local_schema:
-    required: true
-    description: Local schema in which imported foreign tables will be created.
   import_collate:
     required: false
     default: true
+    data_type: boolean
     description: >
       This option controls whether column COLLATE options are included in the definitions
       of foreign tables imported from a foreign server. The default is true.
   import_default:
     required: false
     default: false
+    data_type: boolean
     description: >
       This option controls whether column DEFAULT expressions are included in the definitions
       of foreign tables imported from a foreign server. The default is false.
   import_generated:
     required: false
     default: true
+    data_type: boolean
     description: >
       This option controls whether column GENERATED expressions are included in the definitions
       of foreign tables imported from a foreign server. The default is true.
   import_not_null:
     required: false
     default: true
+    data_type: boolean
     description: >
       This option controls whether column NOT NULL constraints are included in the definitions
       of foreign tables imported from a foreign server. The default is true.
@@ -60,11 +67,22 @@ import_foreign_schema:
 create_foreign_table:
   schema_name:
     required: false
+    data_type: string
     description: >
       Schema name to use for the foreign table on the remote server.
       If this option is omitted, the name of the foreign table's schema is used.
   table_name:
     required: false
+    data_type: string
     description: >
-      Table name to use for the foreign table on the remote server
+      Table name to use for the foreign table on the remote server.
+      If this option is omitted, the foreign table's name is used.
+
+
+foreign_table_column:
+  column_name:
+    required: false
+    data_type: string
+    description: >
+      column name to use for the column on the remote server.
       If this option is omitted, the foreign table's name is used.
