@@ -31,7 +31,7 @@ foreign_server:
     default: 1
     data_type: integer
     description: >
-      Specifies the number of rows which should be inserted in a single INSERT operation. 
+      Specifies the number of rows which should be inserted in a single INSERT operation.
       This setting can be overridden for individual tables.
 
 
@@ -58,13 +58,13 @@ create_foreign_table:
     data_type: string
     description: >
       SQLite table name.
-      Use if not equal to name of foreign table in PostgreSQL. 
+      Use if not equal to name of foreign table in PostgreSQL.
       Also see about identifier case handling.
   truncatable:
     required: false
     data_type: boolean
     description: >
-      Default from the same CREATE SERVER option. 
+      Default from the same CREATE SERVER option.
       See CREATE SERVER options section for details.
   batch_size:
     required: false
@@ -84,18 +84,18 @@ foreign_table_column:
     required: false
     data_type: string
     description: >
-      This option gives the column name to use for the column on the remote server. 
+      This option gives the column name to use for the column on the remote server.
       Also see about identifier case handling.
   column_type:
     required: false
     data_type: string
     description: >
-      Set preferred SQLite affinity for some PostgreSQL data types can be stored in different ways in SQLite (mixed affinity case). 
-      Updated and inserted values will have this affinity. 
+      Set preferred SQLite affinity for some PostgreSQL data types can be stored in different ways in SQLite (mixed affinity case).
+      Updated and inserted values will have this affinity.
       Default preferred SQLite affinity for timestamp and uuid PostgreSQL data types is text.
-      
+
       Use INT value for SQLite column (epoch Unix Time) to be treated/visualized as timestamp in PostgreSQL.
-      
+
       Use BLOB value for SQLite column to be treated/visualized as uuid in PostgreSQL 14+.
   key:
     required: false

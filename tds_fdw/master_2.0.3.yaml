@@ -6,14 +6,109 @@ source: https://github.com/tds-fdw/tds_fdw
 foreign_server:
   servername:
     required: true
-    description: Database server hostname
+    default: 127.0.0.1
+    data_type: string
+    description: >
+      The servername, address or hostname of the foreign server server.
+
+      This can be a DSN, as specified in freetds.conf. See FreeTDS name lookup.
+
+      You can set this option to a comma separated list of server names,
+      then each server is tried until the first connection succeeds.
+      This is useful for automatic fail-over to a secondary server.
   port:
-    required: true
-    default: 1433
-    description: Database port number
+    required: false
+    data_type: integer
+    description: >
+      The port of the foreign server. This is optional.
+      Instead of providing a port here, it can be specified in freetds.conf (if servername is a DSN).
   database:
-    required: true
-    description: Database name
+    required: false
+    data_type: string
+    description: The database to connect to for this server.
+  dbuse:
+    required: false
+    default: 0
+    data_type: integer
+    description: >
+      This option tells tds_fdw to connect directly to database if dbuse is 0.
+      If dbuse is not 0, tds_fdw will connect to the server's default database,
+      and then select database by calling DB-Library's dbuse() function.
+
+      For Azure, dbuse currently needs to be set to 0.
+  language:
+    required: false
+    data_type: string
+    description: >
+      The language to use for messages and the locale to use for date formats.
+      FreeTDS may default to us_english on most systems. You can probably also change this in freetds.conf.
+
+      For information related to this for MS SQL Server, see SET LANGUAGE in MS SQL Server.
+      For information related to Sybase ASE, see Sybase ASE login options and SET LANGUAGE in Sybase ASE.
+  character_set:
+    required: false
+    data_type: string
+    description: The client character set to use for the connection, if you need to set this for some reason.
+  tds_version:
+    required: false
+    data_type: string
+    description: >
+      The version of the TDS protocol to use for this server.
+      See Choosing a TDS protocol version and History of TDS Versions.
+  msg_handler:
+    required: false
+    default: blackhole
+    data_type: string
+    description: >
+      The function used for the TDS message handler.
+      Options are "notice" and "blackhole."
+      With the "notice" option, TDS messages are turned into PostgreSQL notices.
+      With the "blackhole" option, TDS messages are ignored.
+  fdw_startup_cost:
+    required: false
+    data_type: float
+    description: A cost that is used to represent the overhead of using this FDW used in query planning.
+  fdw_tuple_cost:
+    required: false
+    data_type: float
+    description: A cost that is used to represent the overhead of fetching rows from this server used in query planning.
+  sqlserver_ansi_mode:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      This option is supported for SQL Server only. The default is "false".
+      Setting this to "true" will enable the following server-side settings after a successful connection to the foreign server:
+
+      - CONCAT_NULLS_YIELDS_NULL ON
+      - ANSI_NULLS ON
+      - ANSI_WARNINGS ON
+      - QUOTED_IDENTIFIER ON
+      - ANSI_PADDING ON
+      - ANSI_NULL_DFLT_ON ON
+
+      Those parameters in summary are comparable to the SQL Server option ANSI_DEFAULTS.
+      In contrast, sqlserver_ansi_mode currently does not activate the following options:
+
+      - CURSOR_CLOSE_ON_COMMIT
+      - IMPLICIT_TRANSACTIONS
+
+      This follows the behavior of the native ODBC and OLEDB driver for SQL Servers,
+      which explicitly turn them OFF if not configured otherwise.
+  use_remote_estimate:
+    required: false
+    data_type: boolean
+    description: >
+      Whether to estimate the size of the table by performing some operation on the remote server (as defined by row_estimate_method),
+      or whether to just use a local estimate, as defined by local_tuple_estimate.
+  row_estimate_method:
+    required: false
+    data_type: string
+    default: execute
+    description: >
+      The method used to estimate the number of rows in the query.
+      Possible values are "execute" to execute the query on the remote server and get the actual number of rows,
+      or "showplan_all" to get the estimated number of rows using MS SQL Server's SET SHOWPLAN_ALL.
 
 
 user_mapping:
@@ -26,20 +121,69 @@ user_mapping:
 
 
 import_foreign_schema:
-  remote_schema:
-    required: true
-    description: Remote schema in MSSQL/Sybase server to import from.
-  local_schema:
-    required: true
-    description: Local schema in which imported foreign tables will be created.
   import_default:
     required: false
     default: false
-    description: >
-      Controls whether column DEFAULT expressions are included in the definitions of foreign tables.
+    data_type: boolean
+    description: Controls whether column DEFAULT expressions are included in the definitions of foreign tables.
   import_not_null:
     required: false
     default: true
+    data_type: boolean
+    description: Controls whether column NOT NULL constraints are included in the definitions of foreign tables.
+
+
+create_foreign_table:
+  query:
+    required: conditional
+    data_type: string
     description: >
-      This option controls whether column NOT NULL constraints are included in the definitions
-      of foreign tables imported from a foreign server. The default is true.
+      The query string to use to query the foreign table.
+      Mutually exclusive with "table_name" option.
+  schema_name:
+    required: false
+    data_type: string
+    description: >
+      The schema that the table is in.
+      The schema name can also be included in table_name, so this is not required.
+  table_name:
+    required: conditional
+    data_type: string
+    description: >
+      The table on the foreign server to query.
+      Mutually exclusive with "query" option.
+      Option alias: "table"
+  match_column_names:
+    required: false
+    data_type: boolean
+    description: >
+      Whether to match local columns with remote columns by comparing their table names or whether to use the order that they appear in the result set.
+  use_remote_estimate:
+    required: false
+    data_type: boolean
+    description: >
+      Whether to estimate the size of the table by performing some operation on the remote server (as defined by row_estimate_method),
+      or whether to just use a local estimate, as defined by local_tuple_estimate.
+  local_tuple_estimate:
+    required: false
+    data_type: integer
+    description: >
+      A locally set estimate of the number of tuples that is used when use_remote_estimate is disabled.
+  row_estimate_method:
+    required: false
+    data_type: string
+    default: execute
+    description: >
+      The method used to estimate the number of rows in the query.
+      Possible values are "execute" to execute the query on the remote server and get the actual number of rows,
+      or "showplan_all" to get the estimated number of rows using MS SQL Server's SET SHOWPLAN_ALL.
+
+
+foreign_table_column:
+  column_name:
+    required: false
+    data_type: string
+    description: >
+      The name of the column on the remote server.
+      If this is not set, the column's remote name is assumed to be the same as the column's local name.
+      If match_column_names is set to 0 for the table, then column names are not used at all, so this is ignored.
