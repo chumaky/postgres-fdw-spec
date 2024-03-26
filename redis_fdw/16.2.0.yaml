@@ -39,21 +39,21 @@ create_foreign_table:
       Can be 'hash', 'list', 'set' or 'zset'.
       Default: none, meaning only look at scalar values.
   tablekeyprefix:
-    required: false
+    required: conditional
     default: none
     data_type: string
     description: >
       Only get items whose names start with the prefix.
       You can only have one of tablekeyset and tablekeyprefix, and if you use singleton_key you can't have either.
   tablekeyset:
-    required: false
+    required: conditional
     default: none
     data_type: string
     description: >
       Fetch item names from the named set.
       You can only have one of tablekeyset and tablekeyprefix, and if you use singleton_key you can't have either.
   singleton_key:
-    required: false
+    required: conditional
     default: none
     data_type: string
     description: >
