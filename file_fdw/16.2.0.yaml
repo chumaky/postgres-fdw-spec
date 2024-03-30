@@ -43,7 +43,7 @@ create_foreign_table:
     data_type: string
     description: >
       Specifies the data escape character, the same as COPY's ESCAPE option.
-  null:
+  "null":
     required: false
     data_type: string
     description: >
