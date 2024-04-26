@@ -1,0 +1,68 @@
+name: jdbc_fdw
+version: 0.4.0
+source: https://github.com/pgspider/jdbc_fdw
+
+
+foreign_server:
+  drivername:
+    required: true
+    data_type: string
+    description: >
+      The name of the JDBC driver. Note that the driver name has to be specified for jdbc_fdw to work. 
+      It can be found in JDBC driver documentation.
+
+      - PostgreSQL: org.postgresql.Driver
+      - GridDB: com.toshiba.mwcloud.gs.sql.Driver
+  url:
+    required: true
+    data_type: string
+    description: >
+      The JDBC URL that shall be used to connect to the foreign database. 
+      Note that URL has to be specified for jdbc_fdw to work. 
+      It can be found in JDBC driver documentation.
+
+      - PostgreSQL: jdbc:postgresql://[host]:[port]/[database]
+      - GridDB: jdbc:gs://[host]:[port]/[clusterName]/[databaseName]
+  querytimeout:
+    required: false
+    data_type: integer
+    description: >
+      The number of seconds that an SQL statement may execute before timing out. 
+      The option can be used for terminating hung queries.
+  jarfile:
+    required: true
+    data_type: string
+    description: >
+      The path and name(e.g. folder1/folder2/abc.jar) of the JAR file of the JDBC driver to be used of the foreign database. 
+      Note that the path must be absolute path.
+  maxheapsize:
+    required: false
+    data_type: integer
+    description: >
+      The value of the option shall be set to the maximum heap size of the JVM which is being used in jdbc fdw. 
+      It can be set from 1 Mb onwards. This option is used for setting the maximum heap size of the JVM manually.
+
+
+user_mapping:
+  username:
+    required: true
+    data_type: string
+    description: The JDBC username to connect as.
+  password:
+    required: false
+    data_type: string
+    description: The JDBC user's password.
+
+
+import_foreign_schema:
+  recreate:
+    required: false
+    data_type: boolean
+    description: If 'true', table schema will be updated. After schema is imported, we can access tables.
+
+
+foreign_table_column:
+  key:
+    required: false
+    data_type: boolean
+    description: The primary key options can be set while creating a JDBC foreign table object with OPTIONS(key 'true')
