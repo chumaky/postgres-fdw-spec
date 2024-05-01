@@ -1,0 +1,91 @@
+name: duckdb_fdw
+version: 2.1.1
+source: https://github.com/alitrack/duckdb_fdw
+
+
+foreign_server:
+  database:
+    required: true
+    data_type: string
+    description: >
+      DuckDB database path.
+  truncatable:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Allows foreign tables to be truncated using the TRUNCATE command.
+  keep_connections:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Allows to keep connections to DuckDB while there is no SQL operations between PostgreSQL and DuckDB.
+  batch_size:
+    required: false
+    default: 1
+    data_type: integer
+    description: >
+      Specifies the number of rows which should be inserted in a single INSERT operation.
+      This setting can be overridden for individual tables.
+  temp_directory:
+    required: false
+    default: NULL
+    data_type: string
+    description: >
+      Specifies the directory to which to write temp files.
+
+
+# Note: There is no user or password conceptions in DuckDB, 
+# hence duckdb_fdw doesn't require any CREATE USER MAPPING command to be executed during setup.
+user_mapping:
+
+
+# Note: Duckdb doesn't have any custom parameters for IMPORT FOREIGN SCHEMA command.
+# To correspond to the common command syntax it's required to use any dummy value for a remote_schema parameter.
+# IMPORT FOREIGN SCHEMA "some_schema" FROM SERVER duckdb_server INTO public;
+# "some_schema" has no particular meaning for duckdb_server and can be set to an arbitrary value.
+# entry itself must be specified to enable Schema Import tab
+import_foreign_schema:
+
+
+create_foreign_table:
+  table:
+    required: false
+    data_type: string
+    description: >
+      DuckDB table name.
+      Use if not equal to name of foreign table in PostgreSQL.
+      Also see about identifier case handling.
+  truncatable:
+    required: false
+    data_type: boolean
+    description: >
+      Default from the same CREATE SERVER option.
+      See CREATE SERVER options section for details.
+  batch_size:
+    required: false
+    data_type: integer
+    description: >
+      Default from the same CREATE SERVER option.
+      See CREATE SERVER options section for details.
+
+
+foreign_table_column:
+  column_name:
+    required: false
+    data_type: string
+    description: >
+      This option gives the column name to use for the column on the remote server. 
+      Also see about identifier case handling.
+  column_type:
+    required: false
+    data_type: string
+    description: >
+      Option to convert INT DuckDB column (epoch Unix Time) to be treated/visualized as TIMESTAMP in PostgreSQL.
+  key:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Indicates a column as a part of primary key or unique key of DuckDB table.

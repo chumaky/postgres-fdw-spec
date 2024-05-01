@@ -90,3 +90,4 @@ FDW official repo|Folder
 [postgres_fdw](https://www.postgresql.org/docs/current/postgres-fdw.html)|[postgres_fdw](./postgres_fdw/)
 [file_fdw](https://www.postgresql.org/docs/current/file-fdw.html)|[file_fdw](./file_fdw/)
 [jdbc_fdw](https://github.com/pgspider/jdbc_fdw)|[jdbc_fdw](./jdbc_fdw/)
+[duckdb_fdw](https://github.com/alitrack/duckdb_fdw)|[duckdb_fdw](./duckdb_fdw/)
