@@ -36,19 +36,6 @@ foreign_server:
       Specifies the directory to which to write temp files.
 
 
-# Note: There is no user or password conceptions in DuckDB, 
-# hence duckdb_fdw doesn't require any CREATE USER MAPPING command to be executed during setup.
-user_mapping:
-
-
-# Note: Duckdb doesn't have any custom parameters for IMPORT FOREIGN SCHEMA command.
-# To correspond to the common command syntax it's required to use any dummy value for a remote_schema parameter.
-# IMPORT FOREIGN SCHEMA "some_schema" FROM SERVER duckdb_server INTO public;
-# "some_schema" has no particular meaning for duckdb_server and can be set to an arbitrary value.
-# entry itself must be specified to enable Schema Import tab
-import_foreign_schema:
-
-
 create_foreign_table:
   table:
     required: false
