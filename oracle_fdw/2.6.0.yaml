@@ -32,9 +32,9 @@ foreign_server:
     default: off
     data_type: boolean
     description: >
-      Setting this option to "on" sets the Oracle session time zone to the current value 
-      of the PostgreSQL parameter timezone when the connection to Oracle is made. 
-      This is only useful if you plan to use Oracle columns of type TIMESTAMP WITH LOCAL TIME ZONE 
+      Setting this option to "on" sets the Oracle session time zone to the current value
+      of the PostgreSQL parameter timezone when the connection to Oracle is made.
+      This is only useful if you plan to use Oracle columns of type TIMESTAMP WITH LOCAL TIME ZONE
       and want to translate them to timestamp without time zone in PostgreSQL.
 
 
@@ -53,12 +53,118 @@ user_mapping:
 
 
 import_foreign_schema:
-  remote_schema:
-    required: true
-    description: Remote schema in Oracle server to import from.
-  local_schema:
-    required: true
-    description: Local schema in which imported foreign tables will be created.
+  case:
+    required: false
+    default: smart
+    data_type: string
+    description: >
+      Controls case folding for table and column names during import.
+      The possible values are:
+      - keep: leave the names as they are in Oracle, usually in upper case.
+      - lower: translate all table and column names to lower case.
+      - smart: only translate names that are all upper case in Oracle (this is the default).
+  collation:
+    required: false
+    default: default
+    data_type: string
+    description: >
+      The collation used for case folding for the `lower` and `smart` options of case.
+      The default value is `default` which is the database's default collation.
+      Only collations in the pg_catalog schema are supported.
+      See the collname values in the pg_collation catalog for a list of possible values.
+  dblink:
+    required: false
+    data_type: string
+    description: >
+      The Oracle database link through which the schema is accessed.
+      This name must be written exactly as it occurs in Oracle's system catalog, so normally consist of uppercase letters only.
+  readonly:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      Sets the readonly option on all imported tables.
+      INSERT, UPDATE and DELETE is only allowed on tables where this option is not set to yes/on/true.
+  skip_tables:
+    required: false
+    default: false
+    data_type: boolean
+    description: Don't import tables.
+  skip_views:
+    required: false
+    default: false
+    data_type: boolean
+    description: Don't import views.
+  skip_matviews:
+    required: false
+    default: false
+    data_type: boolean
+    description: Don't import materialized views.
+  max_long:
+    required: false
+    default: 32767
+    data_type: integer
+    description: >
+      Sets the max_long option on all imported tables.
+
+      The maximal length of any LONG, LONG RAW and XMLTYPE columns in the Oracle table.
+      Possible values are integers between 1 and 1073741823 (the maximal size of a bytea in PostgreSQL).
+      This amount of memory will be allocated at least twice, so large values will consume a lot of memory.
+      If max_long is less than the length of the longest value retrieved, you will receive the error message ORA-01406: fetched column value was truncated.
+  sample_percent:
+    required: false
+    default: 100
+    data_type: integer
+    description: >
+      Sets the sample_percent option on all imported tables.
+
+      This option only influences ANALYZE processing and can be useful to ANALYZE very large tables in a reasonable time.
+      The value must be between 0.000001 and 100 and defines the percentage of Oracle table blocks that will be randomly selected to calculate PostgreSQL table statistics.
+      This is accomplished using the SAMPLE BLOCK (x) clause in Oracle.
+      ANALYZE will fail with ORA-00933 for tables defined with Oracle queries and may fail with ORA-01446 for tables defined with complex Oracle views.
+  prefetch:
+    required: false
+    default: 50
+    data_type: integer
+    description: >
+      Sets the prefetch option on all imported tables.
+
+      Sets the number of rows that will be fetched with a single round-trip between PostgreSQL and Oracle during a foreign table scan.
+      The value must be between 1 and 1000.
+      Higher values can speed up performance, but will use more memory on the PostgreSQL server.
+      Note that there is no prefetching if the Oracle table contains columns of the type MDSYS.SDO_GEOMETRY.
+  lob_prefetch:
+    required: false
+    default: 1048576
+    data_type: integer
+    description: >
+      Sets the lob_prefetch option on all imported tables.
+
+      Sets the number of bytes that are prefetched for BLOB, CLOB and BFILE values.
+      LOBs that exceed that size will require additional round trips between PostgreSQL and Oracle, so setting this value bigger than the size of your typical LOB will be good for performance.
+      Choosing bigger values for this option can allocate more memory on the server side, but will boost performance for large LOBs.
+  nchar:
+    required: false
+    default: off
+    data_type: boolean
+    description: >
+      Sets the nchar option on all imported tables.
+
+      Setting this option to "on" chooses a more expensive character conversion on the Oracle side.
+      This is required if you are using a single-byte Oracle database character set,
+      but have NCHAR or NVARCHAR2 columns containing contain characters
+      that cannot be represented in the database character set.
+  set_timezone:
+    required: false
+    default: off
+    data_type: boolean
+    description: >
+      Sets the set_timezone option on all imported tables.
+
+      Setting this option to "on" sets the Oracle session time zone to the current value
+      of the PostgreSQL parameter timezone when the connection to Oracle is made.
+      This is only useful if you plan to use Oracle columns of type TIMESTAMP WITH LOCAL TIME ZONE
+      and want to translate them to timestamp without time zone in PostgreSQL.
 
 
 create_foreign_table:
