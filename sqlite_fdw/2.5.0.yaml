@@ -1,0 +1,118 @@
+name: sqlite_fdw
+version: 2.5.0
+source: https://github.com/pgspider/sqlite_fdw
+
+
+foreign_server:
+  database:
+    required: true
+    data_type: string
+    description: SQLite database path.
+  updatable:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      This option can allow or disallow data modification on foreign server for all foreign objects by default. 
+      Please note, this option can be overwritten on table level or have no effect because of some filesystem restrictions. 
+      This is only recommentadion of PostgreSQL foreign server owner user not to modify data in foreign server tables. 
+      For strong restriction see the `force_readonly` option
+  force_readonly:
+    required: false
+    default: false
+    data_type: boolean
+    description: >
+      This option is useful if you need grant user permission to create a foreign tables on the foreign server 
+      and revoke user permission to modify any table data on this foreign server. 
+      This option with true value can disallow any write operations 
+      on foreign server table data through SQLite file readonly access mode. 
+      This option driven only by foreign server owner role can not be overwritten by any updatable option value. 
+      This is a strong restriction given by PostgreSQL foreign server owner user not to modify data in any foreign server tables.
+  truncatable:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      Allows foreign tables to be truncated using the TRUNCATE command.
+  keep_connections:
+    required: false
+    default: true
+    data_type: boolean
+    description: >
+      Allows to keep connections to SQLite while there is no SQL operations between PostgreSQL and SQLite.
+  batch_size:
+    required: false
+    default: 1
+    data_type: integer
+    description: >
+      Specifies the number of rows which should be inserted in a single INSERT operation.
+      This setting can be overridden for individual tables.
+
+
+# Note: sqlite doesn't have schemas. to support common IMPORT FOREIGN SCHEMA syntax
+# it's required to use any dummy value for a remote_schema parameter.
+# IMPORT FOREIGN SCHEMA "some_schema" FROM SERVER sqlite_server INTO public;
+# "some_schema" has no particular meaning for sqlite and can be set to an arbitrary value.
+import_foreign_schema:
+  import_default:
+    required: false
+    default: false
+    data_type: boolean
+    description: Allow borrowing default values from SQLite table DDL.
+  import_not_null:
+    required: false
+    default: true
+    data_type: boolean
+    description: Allow borrowing NULL/NOT NULL constraints from SQLite table DDL.
+
+
+create_foreign_table:
+  table:
+    required: false
+    data_type: string
+    description: >
+      SQLite table name.
+      Use if not equal to name of foreign table in PostgreSQL.
+      Also see about identifier case handling.
+  truncatable:
+    required: false
+    data_type: boolean
+    description: >
+      Default from the same CREATE SERVER option.
+      See CREATE SERVER options section for details.
+  batch_size:
+    required: false
+    data_type: integer
+    description: >
+      Default from the same CREATE SERVER option.
+      See CREATE SERVER options section for details.
+  updatable:
+    required: false
+    data_type: boolean
+    description: >
+      This option can allow or disallow write operations on a SQLite table independed of the same server option.
+
+
+foreign_table_column:
+  column_name:
+    required: false
+    data_type: string
+    description: >
+      This option gives the column name to use for the column on the remote server.
+      Also see about identifier case handling.
+  column_type:
+    required: false
+    data_type: string
+    description: >
+      Set preferred SQLite affinity for some PostgreSQL data types can be stored in different ways in SQLite (mixed affinity case).
+      Updated and inserted values will have this affinity.
+      Default preferred SQLite affinity for timestamp and uuid PostgreSQL data types is text.
+
+      Use INT value for SQLite column (epoch Unix Time) to be treated/visualized as timestamp in PostgreSQL.
+
+      Use BLOB value for SQLite column to be treated/visualized as uuid in PostgreSQL 14+.
+  key:
+    required: false
+    data_type: boolean
+    description: >
+      Indicates a column as a part of primary key or unique key of SQLite table.
